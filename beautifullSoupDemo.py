@@ -2,8 +2,16 @@
 import requests
 import os
 from bs4 import BeautifulSoup
-from PIL import Image
-from io import BytesIO
+import colorama
+from colorama import Fore
+from colorama import Back
+from colorama import Style
+
+colorama.init()
+print(Fore.BLUE + Style.BRIGHT + "This is the color of the sky" + Style.RESET_ALL)
+print(Fore.GREEN + "This is the color of grass" + Style.RESET_ALL)
+print(Fore.BLUE + Style.DIM + "This is a dimmer version of the sky" + Style.RESET_ALL)
+print(Fore.YELLOW + "This is the color of the sun" + Style.RESET_ALL)
 
 # exemple param => http://laceliah.cowblog.fr/2.html
 url = "http://laceliah.cowblog.fr/"
@@ -43,55 +51,49 @@ for article in articles:
     fullArticle.append({'Contenu': article.find('div', class_='article-body')})
     fullArticle.append({'Images': article.find_all('img')})
 
-
+    # For DEBUG
     createFolders = True
-
     if createFolders:
 
         try:
-
             chemin = "uploads/" + encodedTitle
             os.mkdir(chemin)
+            print("== Dossier " + chemin + " crée")
 
             try:
                 fichier = open(chemin + "/contenu.txt", "a")
-                fichier.write("test")
-                """try:
-                    fichier.write(str(fullArticle[1][1].text))
-                except:
-                    print(os.strerror(e.errno))"""
+
+                try:
+                    fichier.write(str(fullArticle[1]['Contenu'].text))
+                    print("==== Fichier crée")
+                except Exception as e:
+
+                    print(os.strerror(e.errno))
 
                 fichier.close()
 
-
             except Exception as e:
+
                 print(os.strerror(e.errno))
 
             if len(fullArticle[2]['Images']) > 0:
-                print('Images ici')
-
                 for img in fullArticle[2]['Images']:
+
                     image = img.get('src')
                     imageName = image.split('/').pop()
-                    print(imageName)
-
                     response = requests.get(image).content
 
-                    with open(imageName, "wb+") as f:
+                    with open(chemin + '/' + imageName, "wb+") as f:
                         f.write(response)
-
-                    """image_bytes = BytesIO(response.content)
-                    img = Image.open(image_bytes)
-                    # img.show()
-                    Image.save(chemin + '/' + imageName)"""
-
+                        print("====== Image " + imageName + " sauvegardé")
 
         except Exception as e:
+            print(Fore.RED + ' TEST' + Style.RESET_ALL)
+
             print(os.strerror(e.errno))
 
         #break
-
-        allPageArticle.append(fullArticle)
+        #allPageArticle.append(fullArticle)
 
 while page < pageMax:
     urls.append(url + str(page) + ".html")
