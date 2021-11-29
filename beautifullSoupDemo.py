@@ -8,10 +8,13 @@ from colorama import Back
 from colorama import Style
 
 colorama.init()
+
+"""" == Colorama example ==
+
 print(Fore.BLUE + Style.BRIGHT + "This is the color of the sky" + Style.RESET_ALL)
 print(Fore.GREEN + "This is the color of grass" + Style.RESET_ALL)
 print(Fore.BLUE + Style.DIM + "This is a dimmer version of the sky" + Style.RESET_ALL)
-print(Fore.YELLOW + "This is the color of the sun" + Style.RESET_ALL)
+print(Fore.YELLOW + "This is the color of the sun" + Style.RESET_ALL)"""
 
 # exemple param => http://laceliah.cowblog.fr/2.html
 url = "http://laceliah.cowblog.fr/"
@@ -30,13 +33,15 @@ urls = ["http://laceliah.cowblog.fr/"]
 articles = soup.find_all('div', class_='article')
 allPageArticle = []
 
-# @totdo: Create one folder per page
+# todo: create main loop
+# todo: Create one folder per page (page1, page2 ...)
 
 for article in articles:
 
     fullArticle = []
 
     """" == Détails == 
+    
     id = article.get('id')
     title = article.find('div', class_='article-top').text
     articleContent = article.find('div', class_='article-body')
@@ -58,14 +63,14 @@ for article in articles:
         try:
             chemin = "uploads/" + encodedTitle
             os.mkdir(chemin)
-            print("== Dossier " + chemin + " crée")
+            print(Fore.GREEN + Style.NORMAL + "== Dossier " + encodedTitle + " crée" + Style.RESET_ALL)
 
             try:
                 fichier = open(chemin + "/contenu.txt", "a")
 
                 try:
                     fichier.write(str(fullArticle[1]['Contenu'].text))
-                    print("==== Fichier crée")
+                    print("==== Fichier de contenu crée")
                 except Exception as e:
 
                     print(os.strerror(e.errno))
@@ -88,12 +93,13 @@ for article in articles:
                         print("====== Image " + imageName + " sauvegardé")
 
         except Exception as e:
-            print(Fore.RED + ' TEST' + Style.RESET_ALL)
+            print(Fore.RED + Style.BRIGHT + ' Dossier ' + encodedTitle + " existe deja" + Style.RESET_ALL)
 
-            print(os.strerror(e.errno))
 
         #break
         #allPageArticle.append(fullArticle)
+
+
 
 while page < pageMax:
     urls.append(url + str(page) + ".html")
