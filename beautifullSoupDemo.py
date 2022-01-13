@@ -21,19 +21,15 @@ print(Fore.GREEN + "This is the color of grass" + Style.RESET_ALL)
 print(Fore.BLUE + Style.DIM + "This is a dimmer version of the sky" + Style.RESET_ALL)
 print(Fore.YELLOW + "This is the color of the sun" + Style.RESET_ALL)"""
 
-
 page = 1
 pageMax = 48
 pageUrl = "http://laceliah.cowblog.fr/"
 
-
 while page < pageMax:
-
 
     folderName = "uploads/page" + str(page)
     if not os.path.isdir(folderName):
         os.mkdir(folderName)
-
 
     url = requests.get(pageUrl + str(page) + ".html")
     print(pageUrl + str(page) + ".html")
@@ -108,4 +104,3 @@ while page < pageMax:
             # allPageArticle.append(fullArticle)
 
     page += 1
-
